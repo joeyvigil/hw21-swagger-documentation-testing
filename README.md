@@ -15,7 +15,7 @@ Path:
 -   parameters: Information about what the data the route requires(Note: Some Routes don't have parameters)
 -   responses: Information about what the data  route returns (Should include examples)
 
-**Note: **We did not cover how to document Query or Path parameters, I want you guys to figure this out for yourselves. As a developer you'll need to be comfortable searching for info on your own.\
+**Note:** We did not cover how to document Query or Path parameters, I want you guys to figure this out for yourselves. As a developer you'll need to be comfortable searching for info on your own.
 Definition(s):
 
 -   PayloadDefinition: Defines the "Shape" of the incoming data 
