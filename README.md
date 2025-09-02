@@ -31,10 +31,10 @@ Utilizing the built-in unittest library:
 -   Thoroughly incorporate negative tests in your testing, these are your safety checks, and are super important.
 
 run your tests with:
-
-Windows: python -m unittest discover tests\
+```shell
+Windows: python -m unittest discover tests
 Mac: : python3 -m unittest discover tests
-
+```
 ## Flask Review
 
 -   Application Factory Set up
@@ -53,7 +53,6 @@ Mac: : python3 -m unittest discover tests
 -   Flask-sqlalchemy
 -   Flask-marshmallow
 -   marshmallow-sqlalchemy
-
 -   Flask-limiter
 -   Flask-caching
 -   Python-jose
