@@ -1,16 +1,16 @@
 
 swagger: '2.0'
 info:
-  title: "Library Management API"
-  description: "Used to manage the everyday functionalities of a library"
-  version: "0.0.1"
+  title: "Mechanic Shop API - Joseph Vigil"
+  description: "Used to manage the everyday functionalities of a mechanic shop"
+  version: "1.0.0"
 
 host: "127.0.0.1:5000" #During development my API is served on my local host (will change when we go to prod)
 schemes:
   - "https"
   - "http"
 consumes:
-  - "application/json" #MY api recieves json data
+  - "application/json" #MY api receives json data
 produces:
   - "application/json" #and produces json data
 
@@ -26,7 +26,7 @@ paths: #Information about our routes
   /users/login: #endpoint starts the path
     post: #request type (post,get,put,delete)
       tags:
-        - Users #Adds this route to a category
+        - Mechanics #Adds this route to a category
       summary: "Login endpoint (generates a token)" #At a glance information about the endpoint
       description: "Validates user credentials (email and password), and produces a user specific token." #more in-depth info about the endpoint
       parameters: #info about the data being sent (DONT FORGET THE 'S' in parameters)
@@ -49,7 +49,7 @@ paths: #Information about our routes
   /users:
     post: #Create User Endpoint
       tags:
-        - Users
+        - Mechanics
       summary: "Register User"
       description: "Send in user info, to create a user profile that will be stored in the database. DOB and Address are optional fields."
       parameters:
@@ -77,18 +77,18 @@ paths: #Information about our routes
     
     get: #Get all users Endpoint
       tags:
-        - Users
+        - Mechanics
       summary: "Returns all users"
       description: "Endpoint to recieve an array of user objects."
       responses:
         200:
-          description: "Successfully Retrieved Users"
+          description: "Successfully Retrieved Mechanics"
           schema:
-            $ref: "#/definitions/UsersResponse"
+            $ref: "#/definitions/MechanicsResponse"
 
     put: #Update a user
       tags:
-        - Users
+        - Mechanics
       summary: "Update User Endpoint"
       description: "Endpoint to update a user, requires a token, user will be identified by the token"
       security:
@@ -118,7 +118,7 @@ paths: #Information about our routes
     
     delete: #Delete a user
       tags:
-        - Users
+        - Mechanics
       summary: "Delete a User"
       description: "Delete a user, requires a token, token will be used to identify user to delete."
       security:
@@ -200,7 +200,7 @@ definitions: #Information about the shape of input and output json
       username:
         type: string
 
-  UsersResponse: #Response for multiple users
+  MechanicsResponse: #Response for multiple users
     type: array
     items:
       type: object

@@ -1,5 +1,5 @@
 from app import create_app
-from app.models import Users, db
+from app.models import Mechanics, db
 import unittest
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.util.auth import encode_token
@@ -7,52 +7,53 @@ from app.util.auth import encode_token
 
 #Run Script: python -m unittest discover tests
 
-class TestUsers(unittest.TestCase):
+class TestMechanics(unittest.TestCase):
 
     #Runs before each test_method
     def setUp(self): 
         self.app = create_app('TestingConfig') #Create a testing version of my app for these testcases
-        self.user = Users(email="tester@email.com", username="tester", password=generate_password_hash('123'), role='user') #Creating a starter user, to test things like get, login, update, and delete
+        self.mechanic = Mechanics(email="tester@email.com",  first_name="tester",last_name="jones", password=generate_password_hash('password123')) #Creating a starter user, to test things like get, login, update, and delete
         with self.app.app_context(): 
             db.drop_all() #removing any lingering table
             db.create_all() #creating fresh for another round of testing
-            db.session.add(self.user)
+            db.session.add(self.mechanic)
             db.session.commit()
-        self.token = encode_token(1, 'user') #encoding a token for my starter User defined above ^
+        self.token = encode_token(1) #encoding a token for my starter Mechanic defined above ^
         self.client = self.app.test_client() #creates a test client that will send requests to our API
 
     
     #test creating a user (IMPORTANT all test functions need to start with test)
-    def test_create_user(self):
-        user_payload = {
-            "email": "test@email.com",
-            "username": "test_user",
-            "password": "123",
-            "role": "admin",
-            "DOB": "1900-01-01",
-            "address": "123 Fun St."
+    def test_create_mechanic(self):
+        mechanic_payload = {
+            "first_name": "test_first_name",
+            "last_name": "test_last_name",
+            "email": "test@gmail.com",
+            "password": "password123",
+            "salary": "1900-01-01",
+            "address": "123 Bike Lane, Boulder, CO"
         }
 
 
-        response = self.client.post('/users', json=user_payload) #sending a test POST request using our test_client, and including the JSON body
+        response = self.client.post('/mechanics', json=mechanic_payload) #sending a test POST request using our test_client, and including the JSON body
         print(response.json)
         self.assertEqual(response.status_code, 201) #checking if I got a 201 status
-        self.assertEqual(response.json['username'], "test_user") #Checking to make sure the data that I sent in, is apart of the response.
-        self.assertTrue(check_password_hash(response.json['password'], "123"))
+        self.assertEqual(response.json['first_name'], "test_first_name") #Checking to make sure the data that I sent in, is apart of the response.
+        self.assertTrue(check_password_hash(response.json['password'], "password123")) #Checking to make sure the password that was sent in, is hashed and stored correctly in the database.
 
 
     #Negative check: See what happens when we intentially try and break an endpoint
     def test_invalid_create(self):
-        user_payload = { #Missing email which should be required
-            "username": "test_user",
-            "password": "123",
-            "role": "admin",
-            "DOB": "1900-01-01",
-            "address": "123 Fun St."
+        mechanic_payload = {
+            "first_name": "test_first_name",
+            "last_name": "test_last_name",
+            #"email": "test@gmail.com",
+            "password": "password123",
+            "salary": "1900-01-01",
+            "address": "123 Bike Lane, Boulder, CO"
         }
 
   
-        response = self.client.post('/users', json=user_payload)
+        response = self.client.post('/mechanics', json=user_payload)
         self.assertEqual(response.status_code, 400)
         self.assertIn('email', response.json) #Membership check that email is in the response json
 
