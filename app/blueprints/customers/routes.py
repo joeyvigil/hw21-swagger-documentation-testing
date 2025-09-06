@@ -36,7 +36,12 @@ def read_customer(customer_id):
 # DELETE '/<int:id'>: Deletes a specific Customer based on the id passed in through the url.
 @customers_bp.route('/<int:customer_id>', methods=['DELETE'])
 def delete_customer(customer_id):
-    customer = db.session.get(Customers, customer_id)
+    try:
+        customer = db.session.get(Customers, customer_id)
+    except Exception as e:
+        return jsonify({"message": "An error occurred while trying to retrieve the customer."}), 500
+    if not customer:
+        return jsonify({"message": "customer not found"}), 404
     db.session.delete(customer)
     db.session.commit()
     return jsonify({"message": f"Successfully deleted customer {customer_id}"}), 200
@@ -56,7 +61,7 @@ def update_customer(customer_id):
         return jsonify({"message": e.messages}), 400
     
     for key, value in customer_data.items():
-        if value: #blank fields will not be updated
+        if value:
             setattr(customer, key, value) 
 
     db.session.commit()

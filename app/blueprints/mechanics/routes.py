@@ -47,7 +47,6 @@ def create_mechanic():
 # Assignment
 # GET '/': Retrieves all Mechanics
 @mechanics_bp.route('', methods=['GET']) 
-@token_required
 def read_mechanics():
     mechanics = db.session.query(Mechanics).all()
     return mechanics_schema.jsonify(mechanics), 200
@@ -66,7 +65,6 @@ def read_user():
 
 # GET at id
 @mechanics_bp.route('<int:mechanic_id>', methods=['GET'])
-@token_required
 def read_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanics, mechanic_id)
     return mechanic_schema.jsonify(mechanic), 200
