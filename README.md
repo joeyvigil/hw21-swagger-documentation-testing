@@ -275,12 +275,12 @@ body:
 response:
 {
     "address": "1990 W Philly Ave",
-    "email": "james@brown.com",
-    "first_name": "james",
+    "email": "jimmy@johns.com",
+    "first_name": "jimmy",
     "id": 1,
-    "last_name": "brown",
+    "last_name": "johns",
     "password": "scrypt:32768:8:1$10R0fzrjfbf47JwR$856943f6178cc37ea6383bb71bcf4fe1342df325860596340ff0cee8ff498beb9fe0b82686c6726e463849372983a2df99190e4ecb7901d3dd0a5037b31fd4af",
-    "salary": 999999.0
+    "salary": 9999.0
 }
 ```
 -   Delete (Token)
@@ -295,7 +295,16 @@ response:
 
 ```
 -   My-tickets (token)
+```json
+method: post
+url: http://127.0.0.1:5000/mechanics/tickets
+bearer token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTcxNjg4ODksImlhdCI6MTc1NzE2NTI4OSwic3ViIjoiNCJ9.lkvvrA3eN-kt1KQRYaDDxT2Ur9WUgafXOLO2hiHodjQ
+response:
+{
+    
+}
 
+```
 
 ### Parts Blueprint (Also includes Part Descriptions):
 
