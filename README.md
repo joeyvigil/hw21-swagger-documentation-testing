@@ -306,14 +306,148 @@ response:
 
 ```
 
-### Parts Blueprint (Also includes Part Descriptions):
+### Inventory Blueprint :
 
--   Create Part Description
--   Read Part Descriptions
--   Update Part Descriptions
--   Delete Part Descriptions
--   Create Part (requires part description id)
+-   Create Inventory
+```json
+method: post
+url: http://127.0.0.1:5000/inventory
+body:
+{    
+    "name": "generic car speakers",
+    "price": 37.90,
+    "quantity": 2
+}
+response:
+{
+    "id": 3,
+    "name": "generic car speakers",
+    "price": 37.9,
+    "quantity": 2
+}
+```
+-   Read Inventory
+```json
+method: get
+url: http://127.0.0.1:5000/inventory
+response:
+[
+    {
+        "id": 2,
+        "name": "front bumper",
+        "price": 120.25,
+        "quantity": 2
+    },
+    {
+        "id": 3,
+        "name": "generic car speakers",
+        "price": 37.9,
+        "quantity": 2
+    }
+]
+```
+```json
+method: get
+url: http://127.0.0.1:5000/inventory/3
+response:
+{
+    "id": 3,
+    "name": "generic car speakers",
+    "price": 37.9,
+    "quantity": 2
+}
+```
+-   Update Inventory
+```json
+method: put
+url: http://127.0.0.1:5000/inventory/3
+body:
+{
+    "name": "pioneer speakers 6.5 inch",
+    "price": 56.70,
+    "quantity": 5
+}
+response: 
+{
+    "id": 3,
+    "name": "pioneer speakers 6.5 inch",
+    "price": 56.7,
+    "quantity": 5
+}
+```
+-   Delete Inventory
+```json
+method: delete
+url: http://127.0.0.1:5000/inventory/2
+response: 
+{
+    "message": "Successfully deleted inventory 2"
+}
+```
+-   Create Part (requires Inventory id)
+```json
+method: post
+url: http://127.0.0.1:5000/ticket_inventory/create-inventory/3
+response:
+{
+    "id": 7,
+    "inventory_id": 3,
+    "ticket_id": -1
+}
+```
 -   Read Part
+```json
+method: get
+url: http://127.0.0.1:5000/ticket_inventory
+response:
+[
+    {
+        "id": 1,
+        "inventory_id": 1,
+        "ticket_id": 1
+    },
+    {
+        "id": 2,
+        "inventory_id": 1,
+        "ticket_id": 1
+    },
+    {
+        "id": 3,
+        "inventory_id": 6,
+        "ticket_id": 1
+    },
+    {
+        "id": 4,
+        "inventory_id": 0,
+        "ticket_id": 1
+    },
+    {
+        "id": 5,
+        "inventory_id": 3,
+        "ticket_id": 0
+    },
+    {
+        "id": 6,
+        "inventory_id": 3,
+        "ticket_id": 0
+    },
+    {
+        "id": 7,
+        "inventory_id": 3,
+        "ticket_id": -1
+    }
+]
+```
+```json
+method: get
+url: http://127.0.0.1:5000/ticket_inventory/7
+response:
+{
+    "id": 7,
+    "inventory_id": 3,
+    "ticket_id": -1
+}
+```
 
 ### Service Ticket Blueprint:
 
@@ -321,4 +455,4 @@ response:
 -   Read Tickets
 -   Add mechanic: Requires Ticket Id and Mechanic Id
 -   Remove mechanic: Requires Ticket Id and Mechanic Id
--   Add Part: Requires Ticket Id and Part Description Id
+-   Add Part: Requires Ticket Id and Inventory Id

@@ -8,7 +8,6 @@ from app.util.auth import encode_token, token_required
 # Assignment
 # PUT '/<ticket_id>/assign-inventory/<inventory-id>: Adds a relationship between a service ticket and the inventorys. (Reminder: use your relationship attributes! They allow you the treat the relationship like a list, able to append a Mechanic to the inventorys list).
 @ticket_inventory_bp.route('<int:ticket_id>/assign-inventory/<int:inventory_id>', methods=['POST'])
-@token_required 
 def create_ticket_inventory(ticket_id, inventory_id):
     print(f"{ticket_id} and {inventory_id}")
     new_ticket_inventory = TicketInventory(ticket_id=ticket_id, inventory_id=inventory_id)
@@ -19,7 +18,6 @@ def create_ticket_inventory(ticket_id, inventory_id):
 # Assignment
 # PUT '/<ticket_id>/remove-inventory/<inventory-id>: Removes the relationship from the service ticket and the inventory.
 @ticket_inventory_bp.route('<int:ticket_id>/remove-inventory/<int:inventory_id>', methods=['DELETE'])
-@token_required
 def delete_ticket_inventory(ticket_id,inventory_id):
     # ticket_inventory = db.session.get(TicketInventory, ticket_inventory_id)
     ticket_inventory = db.session.query(TicketInventory).filter_by(ticket_id=ticket_id,inventory_id=inventory_id).first()
@@ -27,19 +25,27 @@ def delete_ticket_inventory(ticket_id,inventory_id):
     db.session.commit()
     return jsonify({"message": f"Successfully deleted ticket_inventory "}), 200
 
+@ticket_inventory_bp.route('create-inventory/<int:inventory_id>', methods=['POST'])
+def create_inventory(inventory_id):
+    new_ticket_inventory = TicketInventory(ticket_id=-1, inventory_id=inventory_id)
+    db.session.add(new_ticket_inventory)
+    db.session.commit()
+    return ticket_inventory_schema.jsonify(new_ticket_inventory), 201
 
-# # return all service inventorys
-# @ticket_inventory_bp.route('', methods=['GET']) 
-# def read_ticket_inventory():
-#     ticket_inventory = db.session.query(TicketInventory).all()
-#     return ticket_inventory_schema.jsonify(ticket_inventory), 200
 
 
-# # return service inventory at given id
-# @ticket_inventory_bp.route('<int:ticket_inventory_id>', methods=['GET'])
-# def read_ticket_inventory(ticket_inventory_id):
-#     ticket_inventory = db.session.get(TicketInventory, ticket_inventory_id)
-#     return ticket_inventory_schema.jsonify(ticket_inventory), 200
+# return all ticket inventorys
+@ticket_inventory_bp.route('', methods=['GET']) 
+def read_all_ticket_inventory():
+    ticket_inventory = db.session.query(TicketInventory).all()
+    return ticket_inventorys_schema.jsonify(ticket_inventory), 200
+
+
+# return ticket inventory at given id
+@ticket_inventory_bp.route('<int:ticket_inventory_id>', methods=['GET'])
+def read_ticket_inventory(ticket_inventory_id):
+    ticket_inventory = db.session.get(TicketInventory, ticket_inventory_id)
+    return ticket_inventory_schema.jsonify(ticket_inventory), 200
 
 
 
