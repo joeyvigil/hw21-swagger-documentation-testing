@@ -27,39 +27,39 @@ def read_service_tickets():
     return service_tickets_schema.jsonify(service_tickets), 200
 
 
-# # GET at ID
-# @service_tickets_bp.route('<int:service_ticket_id>', methods=['GET'])
-# def read_service_ticket(service_ticket_id):
-#     service_ticket = db.session.get(ServiceTickets, service_ticket_id)
-#     return service_ticket_schema.jsonify(service_ticket), 200
+# GET at ID
+@service_tickets_bp.route('<int:service_ticket_id>', methods=['GET'])
+def read_service_ticket(service_ticket_id):
+    service_ticket = db.session.get(ServiceTickets, service_ticket_id)
+    return service_ticket_schema.jsonify(service_ticket), 200
 
 
-# # Delete at ID
-# @service_tickets_bp.route('<int:service_ticket_id>', methods=['DELETE'])
-# def delete_service_ticket(service_ticket_id):
-#     service_ticket = db.session.get(ServiceTickets, service_ticket_id)
-#     db.session.delete(service_ticket)
-#     db.session.commit()
-#     return jsonify({"message": f"Successfully deleted service_ticket {service_ticket_id}"}), 200
+# Delete at ID
+@service_tickets_bp.route('<int:service_ticket_id>', methods=['DELETE'])
+def delete_service_ticket(service_ticket_id):
+    service_ticket = db.session.get(ServiceTickets, service_ticket_id)
+    db.session.delete(service_ticket)
+    db.session.commit()
+    return jsonify({"message": f"Successfully deleted service_ticket {service_ticket_id}"}), 200
 
 
-# # PUT at id
-# @service_tickets_bp.route('<int:service_ticket_id>', methods=['PUT'])
-# def update_service_ticket(service_ticket_id):
-#     service_ticket = db.session.get(ServiceTickets, service_ticket_id) 
+# PUT at id
+@service_tickets_bp.route('<int:service_ticket_id>', methods=['PUT'])
+def update_service_ticket(service_ticket_id):
+    service_ticket = db.session.get(ServiceTickets, service_ticket_id) 
 
-#     if not service_ticket: 
-#         return jsonify({"message": "service_ticket not found"}), 404  
+    if not service_ticket: 
+        return jsonify({"message": "service_ticket not found"}), 404  
     
-#     try:
-#         service_ticket_data = service_ticket_schema.load(request.json)  # type: ignore
-#     except ValidationError as e:
-#         return jsonify({"message": e.messages}), 400
+    try:
+        service_ticket_data = service_ticket_schema.load(request.json)  # type: ignore
+    except ValidationError as e:
+        return jsonify({"message": e.messages}), 400
     
-#     for key, value in service_ticket_data.items(): 
-#         if value: #blank fields will not be updated
-#             setattr(service_ticket, key, value) 
+    for key, value in service_ticket_data.items(): 
+        if value: #blank fields will not be updated
+            setattr(service_ticket, key, value) 
 
-#     db.session.commit()
-#     return service_ticket_schema.jsonify(service_ticket), 200
+    db.session.commit()
+    return service_ticket_schema.jsonify(service_ticket), 200
     

@@ -2,7 +2,7 @@ from app.blueprints.mechanics import mechanics_bp
 from .schemas import mechanic_schema, mechanics_schema,login_schema
 from flask import request, jsonify
 from marshmallow import ValidationError
-from app.models import Mechanics, db
+from app.models import Mechanics, ServiceMechanics, ServiceTickets, db
 from app.extensions import limiter
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.util.auth import encode_token, token_required
@@ -60,11 +60,22 @@ def read_user():
     mechanic = db.session.get(Mechanics, mechanic_id)
     return mechanic_schema.jsonify(mechanic), 200
 
-# NEED GET '/my-tickets': at end of by end of project as stated in HW19(optional)
+
+# gets all tickets assigned to the logged-in mechanic based on the token provided in the request header
+@mechanics_bp.route('my-tickets', methods=['GET'])
+@token_required
+def mechanic_tickets():
+    mechanic_id = request.mechanic_id  # type: ignore
+    service_tickets = db.session.query(ServiceMechanics).filter(ServiceMechanics.mechanic_id == mechanic_id).all()
+    tickets_list = [ticket.id for ticket in service_tickets]  # or serialize as needed
+    return jsonify({"tickets": tickets_list}), 200
+
+
 
 
 # GET at id
 @mechanics_bp.route('<int:mechanic_id>', methods=['GET'])
+@token_required
 def read_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanics, mechanic_id)
     return mechanic_schema.jsonify(mechanic), 200

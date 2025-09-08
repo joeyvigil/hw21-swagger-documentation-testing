@@ -296,12 +296,14 @@ response:
 ```
 -   My-tickets (token)
 ```json
-method: post
-url: http://127.0.0.1:5000/mechanics/tickets
-bearer token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTcxNjg4ODksImlhdCI6MTc1NzE2NTI4OSwic3ViIjoiNCJ9.lkvvrA3eN-kt1KQRYaDDxT2Ur9WUgafXOLO2hiHodjQ
+method: get
+url: http://127.0.0.1:5000/mechanics/my-tickets
+bearer token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTczMzY4NzUsImlhdCI6MTc1NzMzMzI3NSwic3ViIjoiNCJ9.Ln-06tWZ0A95pZswvEiZd7F8zfBXkecOLJHEo5l2_osQ
 response:
 {
-    
+    "tickets": [
+        2
+    ]
 }
 
 ```
@@ -452,7 +454,83 @@ response:
 ### Service Ticket Blueprint:
 
 -   Create Ticket: Requires Customer Id
+```json
+method: post
+url: http://127.0.0.1:5000/service_tickets
+body:
+{ 
+    "customer_id": 2,
+    "car_VIM": "VIM123456789",
+    "price": 50.25,
+    "service_desc": "checkup" 
+}
+response:
+{
+    "car_VIM": "VIM123456789",
+    "customer_id": 2,
+    "id": 1,
+    "price": 50.25,
+    "service_date": "2025-09-07",
+    "service_desc": "checkup"
+}
+```
 -   Read Tickets
+```json
+method: get
+url: http://127.0.0.1:5000/service_tickets
+response:
+[
+    {
+        "car_VIM": "VIM123456789",
+        "customer_id": 2,
+        "id": 1,
+        "price": 50.25,
+        "service_date": "2025-09-07",
+        "service_desc": "checkup"
+    }
+]
+```
+```json
+method: get
+url: http://127.0.0.1:5000/service_tickets/1
+response:
+{
+    "car_VIM": "VIM123456789",
+    "customer_id": 2,
+    "id": 1,
+    "price": 50.25,
+    "service_date": "2025-09-07",
+    "service_desc": "checkup"
+}
+```
 -   Add mechanic: Requires Ticket Id and Mechanic Id
+```json
+method: post
+url: http://127.0.0.1:5000/service_mechanics/1/assign-mechanic/1
+response:
+{
+    "id": 1,
+    "mechanic_id": 1,
+    "ticket_id": 1
+}
+```
 -   Remove mechanic: Requires Ticket Id and Mechanic Id
+```json
+method: delete
+url: http://127.0.0.1:5000/service_mechanics/1/remove-mechanic/1
+response:
+{
+    "message": "Successfully deleted service_mechanic "
+}
+```
 -   Add Part: Requires Ticket Id and Inventory Id
+```json
+method: post
+url: http://127.0.0.1:5000/ticket_inventory/1/assign-inventory/6
+response:
+{
+    "id": 8,
+    "inventory_id": 6,
+    "ticket_id": 1
+}
+```

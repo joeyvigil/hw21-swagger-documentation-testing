@@ -8,24 +8,28 @@ from app.util.auth import encode_token, token_required
 # Assignment
 # PUT '/<ticket_id>/assign-mechanic/<mechanic-id>: Adds a relationship between a service ticket and the mechanics. (Reminder: use your relationship attributes! They allow you the treat the relationship like a list, able to append a Mechanic to the mechanics list).
 @service_mechanics_bp.route('<int:ticket_id>/assign-mechanic/<int:mechanic_id>', methods=['POST'])
-@token_required 
 def create_service_mechanic(ticket_id, mechanic_id):
-    print(f"{ticket_id} and {mechanic_id}")
-    new_service_mechanic = ServiceMechanics(ticket_id=ticket_id, mechanic_id=mechanic_id)
-    db.session.add(new_service_mechanic)
-    db.session.commit()
-    return service_mechanic_schema.jsonify(new_service_mechanic), 201
+    try:
+        print(f"{ticket_id} and {mechanic_id}")
+        new_service_mechanic = ServiceMechanics(ticket_id=ticket_id, mechanic_id=mechanic_id)
+        db.session.add(new_service_mechanic)
+        db.session.commit()
+        return service_mechanic_schema.jsonify(new_service_mechanic), 201
+    except Exception as e:
+        return jsonify({"message": f"Error creating service_mechanic: {str(e)}"}), 400
 
 # Assignment
 # PUT '/<ticket_id>/remove-mechanic/<mechanic-id>: Removes the relationship from the service ticket and the mechanic.
 @service_mechanics_bp.route('<int:ticket_id>/remove-mechanic/<int:mechanic_id>', methods=['DELETE'])
-@token_required
 def delete_service_mechanic(ticket_id,mechanic_id):
     # service_mechanic = db.session.get(ServiceMechanics, service_mechanic_id)
-    service_mechanic = db.session.query(ServiceMechanics).filter_by(ticket_id=ticket_id,mechanic_id=mechanic_id).first()
-    db.session.delete(service_mechanic)
-    db.session.commit()
-    return jsonify({"message": f"Successfully deleted service_mechanic "}), 200
+    try:
+        service_mechanic = db.session.query(ServiceMechanics).filter_by(ticket_id=ticket_id,mechanic_id=mechanic_id).first()
+        db.session.delete(service_mechanic)
+        db.session.commit()
+        return jsonify({"message": f"Successfully deleted service_mechanic "}), 200
+    except Exception as e:
+        return jsonify({"message": f"Error deleting service_mechanic: {str(e)}"}), 400
 
 
 # # return all service mechanics
