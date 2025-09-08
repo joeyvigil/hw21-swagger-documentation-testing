@@ -18,7 +18,7 @@ def create_customer():
     new_customer = Customers(**data) 
     db.session.add(new_customer)
     db.session.commit()
-    return customer_schema.jsonify(new_customer), 201
+    return customer_schema.jsonify(new_customer), 200
 
 # GET '/': Retrieves all Customers
 @customers_bp.route('/', methods=['GET']) 

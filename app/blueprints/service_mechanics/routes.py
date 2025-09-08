@@ -14,7 +14,7 @@ def create_service_mechanic(ticket_id, mechanic_id):
         new_service_mechanic = ServiceMechanics(ticket_id=ticket_id, mechanic_id=mechanic_id)
         db.session.add(new_service_mechanic)
         db.session.commit()
-        return service_mechanic_schema.jsonify(new_service_mechanic), 201
+        return service_mechanic_schema.jsonify(new_service_mechanic), 200
     except Exception as e:
         return jsonify({"message": f"Error creating service_mechanic: {str(e)}"}), 400
 

@@ -13,7 +13,7 @@ def create_ticket_inventory(ticket_id, inventory_id):
     new_ticket_inventory = TicketInventory(ticket_id=ticket_id, inventory_id=inventory_id)
     db.session.add(new_ticket_inventory)
     db.session.commit()
-    return ticket_inventory_schema.jsonify(new_ticket_inventory), 201
+    return ticket_inventory_schema.jsonify(new_ticket_inventory), 200
 
 # Assignment
 # PUT '/<ticket_id>/remove-inventory/<inventory-id>: Removes the relationship from the service ticket and the inventory.
@@ -30,7 +30,7 @@ def create_inventory(inventory_id):
     new_ticket_inventory = TicketInventory(ticket_id=-1, inventory_id=inventory_id)
     db.session.add(new_ticket_inventory)
     db.session.commit()
-    return ticket_inventory_schema.jsonify(new_ticket_inventory), 201
+    return ticket_inventory_schema.jsonify(new_ticket_inventory), 200
 
 
 

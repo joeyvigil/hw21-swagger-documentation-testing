@@ -17,7 +17,7 @@ def create_inventory():
     new_inventory = Inventory(**data) 
     db.session.add(new_inventory)
     db.session.commit()
-    return inventory_schema.jsonify(new_inventory), 201
+    return inventory_schema.jsonify(new_inventory), 200
 
 # Assignment
 # GET '/': Retrieves all service tickets.

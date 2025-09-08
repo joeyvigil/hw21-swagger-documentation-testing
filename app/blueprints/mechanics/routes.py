@@ -42,7 +42,7 @@ def create_mechanic():
     new_mechanic = Mechanics(**data) 
     db.session.add(new_mechanic)
     db.session.commit()
-    return mechanic_schema.jsonify(new_mechanic), 201
+    return mechanic_schema.jsonify(new_mechanic), 200
 
 # Assignment
 # GET '/': Retrieves all Mechanics

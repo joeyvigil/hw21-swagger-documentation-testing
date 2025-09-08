@@ -17,7 +17,7 @@ def create_service_ticket():
     new_service_ticket = ServiceTickets(**data) 
     db.session.add(new_service_ticket)
     db.session.commit()
-    return service_ticket_schema.jsonify(new_service_ticket), 201
+    return service_ticket_schema.jsonify(new_service_ticket), 200
 
 # Assignment
 # GET '/': Retrieves all service tickets.
