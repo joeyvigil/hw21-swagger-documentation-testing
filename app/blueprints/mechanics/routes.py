@@ -22,7 +22,7 @@ def login():
         token = encode_token(mechanic.id) 
         return jsonify({
             "message": f'Hello There {mechanic.first_name}',
-            "token" : token
+            "token" : f"Bearer {token}"
         }), 200
     
     return jsonify("invalid email or password")
@@ -42,7 +42,7 @@ def create_mechanic():
     new_mechanic = Mechanics(**data) 
     db.session.add(new_mechanic)
     db.session.commit()
-    return mechanic_schema.jsonify(new_mechanic), 200
+    return jsonify(mechanic_schema.dump(new_mechanic)), 200
 
 # Assignment
 # GET '/': Retrieves all Mechanics
