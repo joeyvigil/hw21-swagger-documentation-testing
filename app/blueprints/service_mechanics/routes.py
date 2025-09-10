@@ -15,8 +15,10 @@ def create_service_mechanic(ticket_id, mechanic_id):
         db.session.add(new_service_mechanic)
         db.session.commit()
         return service_mechanic_schema.jsonify(new_service_mechanic), 200
+    except ValidationError as e:
+        return jsonify(e.messages), 400 
     except Exception as e:
-        return jsonify({"message": f"Error creating service_mechanic: {str(e)}"}), 400
+        return jsonify(str(e)), 400
 
 # Assignment
 # PUT '/<ticket_id>/remove-mechanic/<mechanic-id>: Removes the relationship from the service ticket and the mechanic.
@@ -28,8 +30,10 @@ def delete_service_mechanic(ticket_id,mechanic_id):
         db.session.delete(service_mechanic)
         db.session.commit()
         return jsonify({"message": f"Successfully deleted service_mechanic "}), 200
+    except ValidationError as e:
+        return jsonify(e.messages), 400 
     except Exception as e:
-        return jsonify({"message": f"Error deleting service_mechanic: {str(e)}"}), 400
+        return jsonify(str(e)), 400
 
 
 # # return all service mechanics

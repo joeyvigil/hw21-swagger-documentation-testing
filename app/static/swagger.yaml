@@ -22,6 +22,7 @@ securityDefinitions: #Describing how to add token auth to the endpoints
 
 paths:
   /customers:
+
     post:
       tags:
         - Customers
@@ -34,7 +35,6 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/CustomerInput'
-
       responses:
         '200':
           description: Customer created successfully
@@ -46,13 +46,13 @@ paths:
         - Customers
       summary: Get all Customers
       description: "Retrieve a list of all customers in the system"
-
       responses:
         '200':
           description: List of all customers retrieved successfully
 
 
   /customers/{id}:
+
     get:
       tags:
         - Customers
@@ -87,7 +87,6 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/CustomerInput'
-
       responses:
         '200':
           description: Customer updated
@@ -148,11 +147,32 @@ paths:
         '200':
           description: List of all mechanics retrieved successfully
     
+  /mechanics/{id}:
+
+    get:
+      tags:
+        - Mechanics
+      summary: Get Mechanic by ID
+      description: "Retrieve a specific mechanic by their ID"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Mechanic found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mechanic'
     put:
       tags:
         - Mechanics
-      summary: Update Mechanic
+      summary: Update Mechanic (requires token)
       description: "Update an existing mechanic in the system"
+      security:
+       - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -174,30 +194,12 @@ paths:
                 $ref: '#/components/schemas/Mechanic'
 
     delete:
-        tags:
-          - Mechanics
-        summary: Delete Mechanic
-        description: "Delete a mechanic from the system by their ID"
-        parameters:
-          - in: path
-            name: id
-            required: true
-            schema: { type: integer }
-        responses:
-          '200':
-            description: Mechanic deleted
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties: { message: { type: string } }
-
-  /mechanics/{id}:
-    get:
       tags:
         - Mechanics
-      summary: Get Mechanic by ID
-      description: "Retrieve a specific mechanic by their ID"
+      summary: Delete Mechanic (requires token)
+      description: "Delete a mechanic from the system by their ID"
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -205,13 +207,12 @@ paths:
           schema: { type: integer }
       responses:
         '200':
-          description: Mechanic found
+          description: Mechanic deleted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Mechanic'
-
-
+                type: object
+                properties: { message: { type: string } }
 
   /mechanics/login:
     post:
@@ -219,8 +220,6 @@ paths:
         - Mechanics
       summary: Mechanic Login
       description: "Authenticate a mechanic and receive a bearer token for future requests"
-      security:
-       - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -229,8 +228,8 @@ paths:
           schema:
             type: object
             properties:
-              email: { type: string }
-              password: { type: string }
+              email: { example: "bolts@gmail.com", type: string }
+              password: { example: "securepassword", type: string }
 
       responses:
         '200':
@@ -287,6 +286,21 @@ paths:
         '200':
           description: List of all inventory items retrieved successfully
 
+  /inventory/{id}:
+
+    get:
+      tags:
+        - Inventory
+      summary: Get Inventory Item by ID
+      description: "Retrieve a specific inventory item by its ID"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': 
+          description: Inventory item found
     put:
       tags:
         - Inventory
@@ -311,57 +325,6 @@ paths:
       tags:
         - Inventory
       summary: Delete Inventory Item
-      description: "Delete an inventory item from the system by its ID"
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Inventory item deleted
-
-
-  /inventory/{id}:
-    get:
-      tags:
-        - Inventory
-      summary: Get Inventory Item by ID
-      description: "Retrieve a specific inventory item by its ID"
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200': 
-          description: Inventory item found
-                
-    put:
-      tags:
-        - Inventory
-      summary: Update Inventory Item
-      description: "Update an existing inventory item in the system"
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-        - in: body
-          name: body
-          description: "Inventory item object that needs to be updated in the system"
-          required: true
-          schema:
-            $ref: '#/components/schemas/InventoryInput'
-
-      responses:
-        '200':
-          description: Inventory updated
-
-    delete:
-      tags:
-        - Inventory
-      summary: Delete Inventory Item
       parameters:
         - in: path
           name: id
@@ -372,34 +335,37 @@ paths:
           description: Inventory deleted
 
   /ticket_inventory:
-    post:
-      tags:
-        - Ticket Inventory
-      summary: Create Ticket Inventory Item
-      description: "Create a new ticket inventory item in the system"
-      parameters:
-        - in: body
-          name: body
-          description: "Ticket inventory item object that needs to be added to the system"
-          required: true
-          schema:
-            $ref: '#/components/schemas/TicketInventoryInput'
-      responses:
-        '200':
-          description: Ticket inventory item created
-    
+
     get:
       tags:
-        - Ticket Inventory
+        -  Ticket Inventory (association table)
       summary: Get all Ticket Inventory Items
       description: "Retrieve a list of all ticket inventory items in the system"
       responses:
         '200':
           description: List of all ticket inventory items retrieved successfully
+
+  /ticket_inventory/{id}:
+    get:
+      tags:
+        -  Ticket Inventory (association table)
+      summary: Get Ticket Inventory by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Ticket Inventory found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketInventory'
     
     put:
       tags:
-        - Ticket Inventory
+        -  Ticket Inventory (association table)
       summary: Update Ticket Inventory Item
       description: "Update an existing ticket inventory item in the system"
       parameters:
@@ -417,44 +383,11 @@ paths:
         '200':
           description: Ticket inventory item updated
 
-    delete:
-      tags:
-        - Ticket Inventory
-      summary: Delete Ticket Inventory Item
-      description: "Delete a ticket inventory item from the system by its ID"
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Ticket inventory item deleted
-    
-
-
-  /ticket_inventory/{id}:
-    get:
-      tags:
-        - Ticket Inventory
-      summary: Get Ticket Inventory by ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Ticket Inventory found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TicketInventory'
 
   /ticket_inventory/create-inventory/{id}:
     post:
       tags:
-        - Ticket Inventory
+        -  Ticket Inventory (association table)
       summary: Create Part with Inventory ID
       parameters:
         - in: path
@@ -469,7 +402,29 @@ paths:
   /ticket_inventory/{ticketId}/assign-inventory/{inventoryId}:
     post:
       tags:
-        - Ticket Inventory
+        -  Ticket Inventory (association table)
+      summary: Assign Part to Ticket
+      parameters:
+        - in: path
+          name: ticketId
+          required: true
+          schema: { type: integer }
+        - in: path
+          name: inventoryId
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Part assigned to ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketInventory'
+
+  /ticket_inventory/{ticketId}/remove-inventory/{inventoryId}:
+    delete:
+      tags:
+        -  Ticket Inventory (association table)
       summary: Assign Part to Ticket
       parameters:
         - in: path
@@ -493,19 +448,19 @@ paths:
       tags:
         - Service Tickets
       summary: Create Service Ticket
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ServiceTicketInput'
+      description: "Create a new service ticket in the system"
+      parameters:
+        - in: body
+          name: body
+          description: "Service Ticket object that needs to be added to the system"
+          required: true
+          schema:
+            $ref: '#/components/schemas/ServiceTicketInput'
       responses:
         '200':
-          description: Ticket created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceTicket'
+          description: Service Ticket created successfully
+          schema:
+            $ref: '#/components/schemas/ServiceTicket'
     get:
       tags:
         - Service Tickets
@@ -520,6 +475,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ServiceTicket'
+
+  /service_tickets/{id}:
+
+    get:
+      tags:
+        - Service Tickets
+      summary: Get Service Ticket by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Service ticket found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceTicket'
 
     put:
       tags:
@@ -563,108 +537,10 @@ paths:
                 properties:
                   message: { type: string }
 
-  /service_tickets/{id}:
-    get:
-      tags:
-        - Service Tickets
-      summary: Get Service Ticket by ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Service ticket found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceTicket'
-
-  /service_mechanics:
-    post:
-      tags:
-        - Service Mechanics
-      summary: Create Service Mechanic
-      description: "Create a new service mechanic in the system"
-      parameters:
-        - in: body
-          name: body
-          description: "Service mechanic object that needs to be added to the system"
-          required: true
-          schema:
-            $ref: '#/components/schemas/ServiceMechanicInput'
-      responses:
-        '200':
-          description: Service mechanic created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceMechanic'
-    
-    get:
-      tags:
-        - Service Mechanics
-      summary: Get all Service Mechanics
-      description: "Retrieve a list of all service mechanics in the system"
-      responses:
-        '200':
-          description: List of all service mechanics retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ServiceMechanic'
-    
-    put:
-      tags:
-        - Service Mechanics
-      summary: Update Service Mechanic
-      description: "Update an existing service mechanic in the system"
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-        - in: body
-          name: body
-          description: "Service mechanic object that needs to be updated in the system"
-          required: true
-          schema:
-            $ref: '#/components/schemas/ServiceMechanicInput'
-      responses:
-        '200':
-          description: Service mechanic updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceMechanic'
-    
-    delete:
-      tags:
-        - Service Mechanics
-      summary: Delete Service Mechanic
-      description: "Delete a service mechanic from the system by its ID"
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: integer }
-      responses:
-        '200':
-          description: Service mechanic deleted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message: { type: string }
-
   /service_mechanics/{ticketId}/assign-mechanic/{mechanicId}:
     post:
       tags:
-        - Service Mechanics
+        - Service Mechanics (association table)
       summary: Assign Mechanic to Ticket
       parameters:
         - in: path
@@ -686,7 +562,7 @@ paths:
   /service_mechanics/{ticketId}/remove-mechanic/{mechanicId}:
     delete:
       tags:
-        - Service Mechanics
+        - Service Mechanics (association table)
       summary: Remove Mechanic from Ticket
       parameters:
         - in: path
@@ -718,11 +594,11 @@ components:
     CustomerInput:
       type: object
       properties:
-        address: { type: string }
-        email: { type: string }
-        first_name: { type: string }
-        last_name: { type: string }
-        phone: { type: string }
+        address: { example: "123 Main St, Springfield, IL 62701", type: string }
+        email: { example: "name@email.com", type: string }
+        first_name: { example: "John", type: string }
+        last_name: { example: "Doe", type: string }
+        phone: { example: "555-123-4567", type: string }
     Customer:
       allOf:
         - $ref: '#/components/schemas/CustomerInput'
@@ -733,12 +609,12 @@ components:
     MechanicInput:
       type: object
       properties:
-        address: { type: string }
-        email: { type: string }
-        first_name: { type: string }
-        last_name: { type: string }
-        password: { type: string }
-        salary: { type: number }
+        address: { example: "456 Elm St, Springfield, IL 62701", type: string }
+        email: { example: "bolts@gmail.com", type: string }
+        first_name: { example: "Jane", type: string }
+        last_name: { example: "Smith", type: string }
+        password: { example: "securepassword", type: string }
+        salary: { example: 55000.00, type: number }
     Mechanic:
       allOf:
         - $ref: '#/components/schemas/MechanicInput'
@@ -749,9 +625,9 @@ components:
     InventoryInput:
       type: object
       properties:
-        name: { type: string }
-        price: { type: number }
-        quantity: { type: integer }
+        name: { example: "Brake Pads", type: string }
+        price: { example: 49.99, type: number }
+        quantity: { example: 1, type: integer }
     Inventory:
       allOf:
         - $ref: '#/components/schemas/InventoryInput'
@@ -762,23 +638,24 @@ components:
     ServiceTicketInput:
       type: object
       properties:
-        customer_id: { type: integer }
-        car_VIM: { type: string }
-        price: { type: number }
-        service_desc: { type: string }
+        customer_id: { example: 1, type: integer }
+        car_VIM: { example: "1HGCM82633A123456", type: string }
+        price: { example: 250.00, type: number }
+        service_desc: { example: "Oil change and tire rotation", type: string }
+        service_date: { example: "2025-01-25", type: string, format: date }
     ServiceTicket:
       allOf:
         - $ref: '#/components/schemas/ServiceTicketInput'
         - type: object
           properties:
             id: { type: integer }
-            service_date: { type: string, format: date }
+
 
     TicketInventoryInput:
       type: object
       properties:
-        inventory_id: { type: integer }
-        ticket_id: { type: integer }
+        inventory_id: { example: 1, type: integer }
+        ticket_id: { example: 1, type: integer }
     TicketInventory:
       allOf:
         - $ref: '#/components/schemas/TicketInventoryInput'
@@ -789,8 +666,8 @@ components:
     ServiceMechanicInput:
       type: object
       properties:
-        ticket_id: { type: integer }
-        mechanic_id: { type: integer }
+        ticket_id: { example: 1, type: integer }
+        mechanic_id: { example: 1, type: integer }
     ServiceMechanic:
       allOf:
         - $ref: '#/components/schemas/ServiceMechanicInput'
