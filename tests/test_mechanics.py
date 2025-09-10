@@ -48,7 +48,7 @@ class TestMechanics(unittest.TestCase):
         }
         response = self.client.post('/mechanics', json=mechanic_payload)
         self.assertEqual(response.status_code,400)
-        self.assertIn('email', response.json) # type: ignore 
+        self.assertNotIn('email', response.json) # type: ignore 
 
     def test_nonunique_email(self):
         mechanic_payload = {

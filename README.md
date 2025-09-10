@@ -1,6 +1,19 @@
 # hw21-swagger-documentation-testing
 Utilizing Flask-Swagger and Flask-Swagger-UI Document Each Route of your API
 
+## Swagger
+Run app.py and view swagger document at http://127.0.0.1:5000/api/docs
+
+![Swagger UI Screenshot](images/swagger_screenshot.jpg)
+
+![mechanics_shop_erd](images/mechanic_shop_erd.png)
+
+## Testing
+
+Passed all tests for the mechanics blueprint.
+
+![Mechanics Blueprint Test Screenshot](images/testing.jpg)
+
 ## Documentation
 Utilizing Flask-Swagger and Flask-Swagger-UI Document Each Route of your API. Each Route Requires:
 
